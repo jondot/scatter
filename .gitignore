@@ -1,0 +1,5 @@
+libscatter.h
+libscatter.so
+Gemfile.lock
+ext/ext
+pkg/
