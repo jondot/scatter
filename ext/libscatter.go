@@ -55,6 +55,8 @@ func scatter_request(data *C.char) string {
 		result[resp.Uri] = resp
 	}
 
+	close(c)
+
 	b, err := json.Marshal(result)
 	if err != nil {
 		return "{}"
