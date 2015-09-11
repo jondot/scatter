@@ -16,21 +16,22 @@ type Response struct {
 	Body   string `json:"body"`
 	Status int    `json:"status"`
 	Err    string `json"error"`
+	Uri    string `json:"uri"`
 }
 
 func makeRequest(uri string) *Response {
 	resp, err := http.Get(uri)
 	if err != nil {
-		return &Response{Body: "", Status: resp.StatusCode, Err: err.Error()}
+		return &Response{Status: resp.StatusCode, Err: err.Error()}
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return &Response{Body: "", Status: resp.StatusCode, Err: err.Error()}
+		return &Response{Status: resp.StatusCode, Err: err.Error()}
 	}
 
-	return &Response{Body: string(body), Status: resp.StatusCode, Err: ""}
+	return &Response{Uri: uri, Body: string(body), Status: resp.StatusCode, Err: ""}
 }
 
 //export scatter_request
@@ -49,9 +50,9 @@ func scatter_request(data *C.char) string {
 	}
 
 	result := Result{}
-	for _, uri := range cmd.URIs {
+	for _ = range cmd.URIs {
 		resp := <-c
-		result[uri] = resp
+		result[resp.Uri] = resp
 	}
 
 	b, err := json.Marshal(result)
