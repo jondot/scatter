@@ -20,9 +20,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.extensions = %w[ext/extconf.rb]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = ""
-  end
 
   spec.add_dependency "ffi"
   spec.add_development_dependency "bundler", "~> 1.9"
