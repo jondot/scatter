@@ -15,7 +15,7 @@ type Result map[string]*Response
 type Response struct {
 	Body   string `json:"body"`
 	Status int    `json:"status"`
-	Err    string `json"error"`
+	Err    string `json:"error"`
 	Uri    string `json:"uri"`
 }
 
@@ -31,7 +31,7 @@ func makeRequest(uri string) *Response {
 		return &Response{Status: resp.StatusCode, Err: err.Error()}
 	}
 
-	return &Response{Uri: uri, Body: string(body), Status: resp.StatusCode, Err: ""}
+	return &Response{Uri: uri, Body: string(body), Status: resp.StatusCode}
 }
 
 //export scatter_request
@@ -50,10 +50,12 @@ func scatter_request(data *C.char) string {
 	}
 
 	result := Result{}
-	for _ = range cmd.URIs {
+	for i := 0; i < len(cmd.URIs); i++ {
 		resp := <-c
 		result[resp.Uri] = resp
 	}
+
+	close(c)
 
 	b, err := json.Marshal(result)
 	if err != nil {
