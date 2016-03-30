@@ -1,5 +1,5 @@
 default:
-	go build -buildmode=c-shared -o libscatter.so ext/libscatter.go
+	go build -buildmode=c-shared -o ext/libscatter.so ext/libscatter.go
 
 bench:
 	@ruby -Ilib examples/bench.rb
